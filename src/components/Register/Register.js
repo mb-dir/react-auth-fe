@@ -14,6 +14,12 @@ export const Register = () => {
   const [ username, setUsername ] = useState("");
   const [ isValidUsername, setIsValidUsername ] = useState(false);
 
+  const [ password, setPassword ] = useState("");
+  const [ isValidPassword, setIsValidPassword ] = useState(false);
+
+  const [ confirmPassword, setConfirmPassword ] = useState("");
+  const [ arePasswordsSame, setArePasswordsSame ] = useState(false);
+
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +31,27 @@ export const Register = () => {
       setIsValidUsername(USER_REGEX.test(username));
     },
     [ USER_REGEX, username ]
+  );
+
+  useEffect(
+    () => {
+      setIsValidPassword(PWD_REGEX.test(password));
+    },
+    [ PWD_REGEX, password ]
+  );
+
+  useEffect(
+    () => {
+      setIsValidPassword(PWD_REGEX.test(password));
+    },
+    [ PWD_REGEX, password ]
+  );
+
+  useEffect(
+    () => {
+      setArePasswordsSame(password === confirmPassword && password !== "");
+    },
+    [ confirmPassword, password ]
   );
 
   return (
@@ -49,6 +76,48 @@ export const Register = () => {
           autoComplete="off"
           ref={usernameRef}
           type="text"
+        />
+
+        <label htmlFor="password">
+          Password
+          <FontAwesomeIcon
+            icon={faCheck}
+            className={clsx(isValidPassword ? "valid" : "hide")}
+          />
+          <FontAwesomeIcon
+            icon={faTimes}
+            className={clsx(isValidPassword || !password ? "hide" : "invalid")}
+          />
+        </label>
+        <input
+          id="password"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          required
+          autoComplete="off"
+          type="password"
+        />
+
+        <label htmlFor="confirmPassword">
+          Confirm password
+          <FontAwesomeIcon
+            icon={faCheck}
+            className={clsx(arePasswordsSame ? "valid" : "hide")}
+          />
+          <FontAwesomeIcon
+            icon={faTimes}
+            className={clsx(
+              arePasswordsSame || !confirmPassword ? "hide" : "invalid"
+            )}
+          />
+        </label>
+        <input
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={({ target }) => setConfirmPassword(target.value)}
+          required
+          autoComplete="off"
+          type="password"
         />
       </form>
     </section>
