@@ -1,14 +1,12 @@
 import clsx from "clsx";
-import {
-  faCheck,
-  faTimes,
-  faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 
 export const Register = () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
   const [ username, setUsername ] = useState("");
