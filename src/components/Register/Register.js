@@ -18,6 +18,9 @@ export const Register = () => {
   const [ confirmPassword, setConfirmPassword ] = useState("");
   const [ arePasswordsSame, setArePasswordsSame ] = useState(false);
 
+  const isButtonDisabled =
+    !arePasswordsSame || !isValidPassword || !isValidUsername;
+
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -117,7 +120,10 @@ export const Register = () => {
           autoComplete="off"
           type="password"
         />
+        <button disabled={isButtonDisabled}>Sign up</button>
       </form>
+      <p>Already registered?</p>
+      <a href="#">Sign in</a>
     </section>
   );
 };
