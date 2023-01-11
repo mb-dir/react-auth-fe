@@ -1,3 +1,8 @@
+import { Register } from "./components/Register";
 export const App = () => {
-  return <div className="App">app</div>;
+  return (
+    <main className="App">
+      <Register />
+    </main>
+  );
 };
