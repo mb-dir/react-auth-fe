@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useEffect, useState } from "react";
+import { logIn } from "../../services/user";
 export const Login = () => {
   const usernameRef = useRef(null);
 
@@ -10,11 +11,24 @@ export const Login = () => {
   const [ username, setUsername ] = useState("");
   const [ pwd, setPwd ] = useState("");
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      const res = await logIn(username, pwd);
+      console.log(res);
+      setUsername("");
+      setPwd("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section>
       <h1>Sign in</h1>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
           type="text"

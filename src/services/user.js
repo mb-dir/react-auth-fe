@@ -6,3 +6,16 @@ export const signUp = async (username, password) => {
     withCredentials: true,
   });
 };
+
+export const logIn = async (username, password) => {
+  const { data } = await axios.post(
+    "/auth",
+    JSON.stringify({ user: username, password }),
+    {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }
+  );
+
+  return data;
+};
