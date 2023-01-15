@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import { logIn } from "../../services/user";
+import AuthContext from "../../context/AuthProvider";
 export const Login = () => {
+  const { setAuth } = useContext(AuthContext);
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -15,8 +17,8 @@ export const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await logIn(username, pwd);
-      console.log(res);
+      const { accessToken, roles } = await logIn(username, pwd);
+      setAuth({ user: username, pwd, roles, accessToken });
       setUsername("");
       setPwd("");
     } catch (error) {
