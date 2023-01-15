@@ -1,7 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from "clsx";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
+import { signUp } from "../../services/user";
 
 export const Register = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -18,7 +20,7 @@ export const Register = () => {
   const [ confirmPassword, setConfirmPassword ] = useState("");
   const [ arePasswordsSame, setArePasswordsSame ] = useState(false);
 
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [ isSuccess, setIsSuccess ] = useState(false);
 
   const isButtonDisabled =
     !arePasswordsSame || !isValidPassword || !isValidUsername;
@@ -59,77 +61,100 @@ export const Register = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(username, password);
-    setIsSuccess(true);
+    try {
+      await signUp(username, password);
+      setIsSuccess(true);
+
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      setIsSuccess(false);
+      console.error(error);
+    }
   };
 
   return (
     <section>
       {isSuccess ? (
-        <>
+        <div>
           <h1>Success</h1>
           <a href="#">Sign in</a>
-        </>) : (
-        <>
+        </div>
+      ) : (
+        <div>
           <form onSubmit={handleSubmit}>
-          <label htmlFor="username">
-            Username
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(isValidUsername ? "valid" : "hide")} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(isValidUsername || !username ? "hide" : "invalid")} />
-          </label>
-          <input
-            id="username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            required
-            autoComplete="off"
-            ref={usernameRef}
-            type="text" />
+            <label htmlFor="username">
+              Username
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={clsx(isValidUsername ? "valid" : "hide")}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={clsx(
+                  isValidUsername || !username ? "hide" : "invalid"
+                )}
+              />
+            </label>
+            <input
+              id="username"
+              value={username}
+              onChange={({ target }) => setUsername(target.value)}
+              required
+              autoComplete="off"
+              ref={usernameRef}
+              type="text"
+            />
 
-          <label htmlFor="password">
-            Password
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(isValidPassword ? "valid" : "hide")} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(isValidPassword || !password ? "hide" : "invalid")} />
-          </label>
-          <input
-            id="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            required
-            autoComplete="off"
-            type="password" />
+            <label htmlFor="password">
+              Password
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={clsx(isValidPassword ? "valid" : "hide")}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={clsx(
+                  isValidPassword || !password ? "hide" : "invalid"
+                )}
+              />
+            </label>
+            <input
+              id="password"
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+              required
+              autoComplete="off"
+              type="password"
+            />
 
-          <label htmlFor="confirmPassword">
-            Confirm password
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(arePasswordsSame ? "valid" : "hide")} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(
-                arePasswordsSame || !confirmPassword ? "hide" : "invalid"
-              )} />
-          </label>
-          <input
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-            required
-            autoComplete="off"
-            type="password" />
-          <button disabled={isButtonDisabled}>Sign up</button>
-        </form>
-        <p>Already registered?</p>
-        <a href="#">Sign in</a>
-      </>)}
+            <label htmlFor="confirmPassword">
+              Confirm password
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={clsx(arePasswordsSame ? "valid" : "hide")}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={clsx(
+                  arePasswordsSame || !confirmPassword ? "hide" : "invalid"
+                )}
+              />
+            </label>
+            <input
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={({ target }) => setConfirmPassword(target.value)}
+              required
+              autoComplete="off"
+              type="password"
+            />
+            <button disabled={isButtonDisabled}>Sign up</button>
+          </form>
+          <p>Already registered?</p>
+          <a href="#">Sign in</a>
+        </div>
+      )}
     </section>
   );
 };
