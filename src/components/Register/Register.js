@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
-import axios from "../../api/axios";
+import { signUp } from "../../services/user";
 
 export const Register = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,16 +62,7 @@ export const Register = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "/register",
-        JSON.stringify({ user: username, password }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      console.log(JSON.stringify(response));
+      await signUp(username, password);
       setIsSuccess(true);
 
       setUsername("");
