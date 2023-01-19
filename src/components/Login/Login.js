@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useRef, useEffect, useState, useContext } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
-import AuthContext from "../../context/AuthProvider";
 export const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
