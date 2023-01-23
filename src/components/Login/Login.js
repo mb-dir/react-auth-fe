@@ -1,14 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useRef, useEffect, useState, useContext } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
-import AuthContext from "../../context/AuthProvider";
+import { useNavigate, useLocation } from "react-router-dom";
 export const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
     usernameRef.current.focus();
   }, []);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
 
   const [ username, setUsername ] = useState("");
   const [ pwd, setPwd ] = useState("");
@@ -21,6 +26,7 @@ export const Login = () => {
       setAuth({ user: username, pwd, roles, accessToken });
       setUsername("");
       setPwd("");
+      navigate(from, { replace: true });
     } catch (error) {
       console.error(error);
     }
