@@ -10,6 +10,9 @@ import { Login } from "./components/Login";
 import { Home } from "./components/Home";
 import { RequiredAuth } from "./components/RequiredAuth";
 import { Routes, Route } from "react-router-dom";
+
+const ROLES = { Admin: 5150, Editor: 1984, User: 2001 };
+
 export const App = () => {
   return (
     <Routes>
@@ -20,15 +23,25 @@ export const App = () => {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* Protected routes */}
-        <Route element={<RequiredAuth />}>
+        <Route element={<RequiredAuth allowedRoles={[ ROLES.User ]} />}>
           <Route path="/" element={<Home />} />
+        </Route>
+        <Route element={<RequiredAuth allowedRoles={[ ROLES.Editor ]} />}>
           <Route path="editor" element={<Editor />} />
+        </Route>
+        <Route element={<RequiredAuth allowedRoles={[ ROLES.Admin ]} />}>
           <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route
+          element={
+            <RequiredAuth allowedRoles={[ ROLES.Admin, ROLES.Editor ]} />
+          }
+        >
           <Route path="lounge" element={<Lounge />} />
         </Route>
-
-        <Route path="*" element={<Missing />} />
       </Route>
+
+      <Route path="*" element={<Missing />} />
     </Routes>
   );
 };

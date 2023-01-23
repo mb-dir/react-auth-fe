@@ -13,7 +13,7 @@ export const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state.from.pathname || "/";
+  const from = location?.state?.from?.pathname || "/";
 
   const [ username, setUsername ] = useState("");
   const [ pwd, setPwd ] = useState("");
