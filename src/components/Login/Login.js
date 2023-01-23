@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 export const Login = () => {
   const { setAuth } = useAuth();
   const usernameRef = useRef(null);

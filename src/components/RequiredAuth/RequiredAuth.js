@@ -7,8 +7,6 @@ export const RequiredAuth = ({ allowedRoles }) => {
 
   const isUserExist = !!auth.user;
 
-  console.log(auth.roles, allowedRoles);
-
   return (auth.roles || []).find(role => allowedRoles.includes(role)) ? (
     <Outlet />
   ) : isUserExist ? (
