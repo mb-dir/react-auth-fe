@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 export const Login = () => {
   const { setAuth } = useAuth();
   const usernameRef = useRef(null);
@@ -9,6 +10,10 @@ export const Login = () => {
   useEffect(() => {
     usernameRef.current.focus();
   }, []);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state.from.pathname || "/";
 
   const [ username, setUsername ] = useState("");
   const [ pwd, setPwd ] = useState("");
@@ -21,6 +26,7 @@ export const Login = () => {
       setAuth({ user: username, pwd, roles, accessToken });
       setUsername("");
       setPwd("");
+      navigate(from, { replace: true });
     } catch (error) {
       console.error(error);
     }
