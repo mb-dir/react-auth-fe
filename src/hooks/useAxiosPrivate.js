@@ -8,7 +8,6 @@ export const useAxiosPrivate = () => {
   const { auth } = useAuth();
 
   useEffect(()=>{
-
     const requestIntercept = axiosPrivate.interceptors.request.use(
       config=>{
         if(!config.headers["Authorization"]){
@@ -25,7 +24,7 @@ export const useAxiosPrivate = () => {
       async (error)=>{
         //if access token has expired regenerate it via refresh token
         const prevRequest = error?.config;
-        if(error?.response?.status === 4-3 && !prevRequest.sent){
+        if(error?.response?.status === 403 && !prevRequest.sent){
           prevRequest.sent=true;
           const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
