@@ -17,8 +17,7 @@ export const Users = () => {
         const res = await axiosPrivate.get("/users", {
           signal: controller.signal,
         });
-
-        console.log(res.data);
+        console.log(res)
 
         isMounted && setUsers(res.data);
       } catch (error) {
