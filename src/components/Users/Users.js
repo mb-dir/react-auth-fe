@@ -18,9 +18,7 @@ export const Users = () => {
           signal: controller.signal,
         });
 
-        console.log(res.data);
-
-        isMounted && setUsers(res.data);
+        isMounted && setUsers(res?.data);
       } catch (error) {
         console.log(error);
         navigate('/login', {state: {from: location}, replace: true})
