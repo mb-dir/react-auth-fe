@@ -17,9 +17,8 @@ export const Users = () => {
         const res = await axiosPrivate.get("/users", {
           signal: controller.signal,
         });
-        console.log(res)
 
-        isMounted && setUsers(res.data);
+        isMounted && setUsers(res?.data);
       } catch (error) {
         console.log(error);
         navigate('/login', {state: {from: location}, replace: true})
