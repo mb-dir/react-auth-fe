@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
 import { useNavigate, useLocation } from "react-router-dom";
 export const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, isPersist, setIsPersist } = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -32,6 +32,14 @@ export const Login = () => {
     }
   };
 
+  const persistToggle = ()=>{
+    setIsPersist(prev => !prev);
+  }
+
+  useEffect(()=>{
+    localStorage.setItem("persist", isPersist);
+  }, [isPersist])
+
   return (
     <section>
       <h1>Sign in</h1>
@@ -56,6 +64,10 @@ export const Login = () => {
           required
         />
         <button>Sign in</button>
+        <div className="persistCheck">
+          <input type="checkbox" id="persist" checked={isPersist} onChange={persistToggle}/>
+          <label htmlFor="persist">Trust this device</label>
+        </div>
         <p>Need an account?</p>
         <a href="#">Click here</a>
       </form>

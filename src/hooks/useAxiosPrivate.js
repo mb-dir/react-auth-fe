@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRefreshToken } from "./useRefreshToken";
 import { useAuth } from "./useAuth";
 
-export const useAxiosPrivate = () => {
+const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const { auth } = useAuth();
 
@@ -15,7 +15,7 @@ export const useAxiosPrivate = () => {
         }
         return config;
       }, (error)=>{
-        Promise.reject(error);
+         return Promise.reject(error);
       }
     );
 
@@ -24,13 +24,13 @@ export const useAxiosPrivate = () => {
       async (error)=>{
         //if access token has expired regenerate it via refresh token
         const prevRequest = error?.config;
-        if(error?.response?.status === 403 && !prevRequest.sent){
+        if(error?.response?.status === 403 && !prevRequest?.sent){
           prevRequest.sent=true;
           const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
-        Promise.reject(error);
+        return Promise.reject(error);
       }
     );
 
@@ -42,3 +42,5 @@ export const useAxiosPrivate = () => {
 
   return axiosPrivate;
 };
+
+export default useAxiosPrivate;

@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import useLogout from "../../hooks/useLogout";
 export const Home = () => {
-  const { setAuth } = useAuth();
+  const logout = useLogout();
   const navigate = useNavigate();
 
   const logOut = async () => {
-    setAuth({});
+    await logout();
     navigate("/linkpage");
   };
   return (
