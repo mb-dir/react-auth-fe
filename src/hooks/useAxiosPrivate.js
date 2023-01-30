@@ -15,7 +15,7 @@ const useAxiosPrivate = () => {
         }
         return config;
       }, (error)=>{
-        Promise.reject(error);
+         return Promise.reject(error);
       }
     );
 
@@ -24,13 +24,13 @@ const useAxiosPrivate = () => {
       async (error)=>{
         //if access token has expired regenerate it via refresh token
         const prevRequest = error?.config;
-        if(error?.response?.status === 403 && !prevRequest.sent){
+        if(error?.response?.status === 403 && !prevRequest?.sent){
           prevRequest.sent=true;
           const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
-        Promise.reject(error);
+        return Promise.reject(error);
       }
     );
 
