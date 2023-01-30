@@ -32,6 +32,14 @@ export const Login = () => {
     }
   };
 
+  const persistToggle = ()=>{
+    setIsPersist(prev => !prev);
+  }
+
+  useEffect(()=>{
+    localStorage.setItem("persist", isPersist);
+  }, [isPersist])
+
   return (
     <section>
       <h1>Sign in</h1>
@@ -57,7 +65,7 @@ export const Login = () => {
         />
         <button>Sign in</button>
         <div className="persistCheck">
-          <input type="checkbox" id="persist" checked={isPersist}/>
+          <input type="checkbox" id="persist" checked={isPersist} onChange={persistToggle}/>
           <label htmlFor="persist">Trust this device</label>
         </div>
         <p>Need an account?</p>
