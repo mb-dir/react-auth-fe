@@ -10,13 +10,10 @@ export const Users = () => {
 
   useEffect(() => {
     let isMounted = true;
-    const controller = new AbortController();
 
     const getUsers = async () => {
       try {
-        const res = await axiosPrivate.get("/users", {
-          signal: controller.signal,
-        });
+        const res = await axiosPrivate.get('/users');
 
         isMounted && setUsers(res?.data);
       } catch (error) {
@@ -28,9 +25,8 @@ export const Users = () => {
 
     return () => {
       isMounted = false;
-      controller.abort();
     };
-  }, []);
+  }, [axiosPrivate, location, navigate]);
 
   return (
     <article>
