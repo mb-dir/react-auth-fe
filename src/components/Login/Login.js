@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
 import { useNavigate, useLocation } from "react-router-dom";
 export const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, isPersist, setIsPersist } = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -56,6 +56,10 @@ export const Login = () => {
           required
         />
         <button>Sign in</button>
+        <div className="persistCheck">
+          <input type="checkbox" id="persist" checked={isPersist}/>
+          <label htmlFor="persist">Trust this device</label>
+        </div>
         <p>Need an account?</p>
         <a href="#">Click here</a>
       </form>
