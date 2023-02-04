@@ -14,8 +14,8 @@ export const Users = () => {
     const getUsers = async () => {
       try {
         const res = await axiosPrivate.get('/users');
-
-        isMounted && setUsers(res?.data);
+        const usernames = res?.data.map(user=>user.username);
+        isMounted && setUsers(usernames);
       } catch (error) {
         console.log(error);
         navigate('/login', {state: {from: location}, replace: true})
@@ -32,7 +32,7 @@ export const Users = () => {
     <article>
       <h2>Users list</h2>
       {users?.length ? (
-        <ul>{(users || []).map((user, i) => <li key={i}>{user.username}</li>)}</ul>
+        <ul>{(users || []).map((user, i) => <li key={i}>{user}</li>)}</ul>
       ) : (
         <p>No users</p>
       )}
