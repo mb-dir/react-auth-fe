@@ -26,7 +26,7 @@ export const Login = () => {
 
     try {
       const { accessToken, roles } = await logIn(username, pwd);
-      setAuth({ user: username, pwd, roles, accessToken });
+      setAuth({ user: username, roles, accessToken });
       setUsername("");
       setPwd("");
       navigate(from, { replace: true });
