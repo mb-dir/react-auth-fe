@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 export const Login = () => {
-  const { setAuth, isPersist, setIsPersist } = useAuth();
+  const { setAuth} = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ export const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
+  const [ isChecked, setIsChecked ] = useLocalStorage("persist", false);
   const [ username, setUsername ] = useLocalStorage("user", "");
   const [ pwd, setPwd ] = useState("");
 
@@ -35,12 +36,8 @@ export const Login = () => {
   };
 
   const persistToggle = ()=>{
-    setIsPersist(prev => !prev);
+    setIsChecked(prev => !prev);
   }
-
-  useEffect(()=>{
-    localStorage.setItem("persist", isPersist);
-  }, [isPersist])
 
   return (
     <section>
@@ -67,7 +64,7 @@ export const Login = () => {
         />
         <button>Sign in</button>
         <div className="persistCheck">
-          <input type="checkbox" id="persist" checked={isPersist} onChange={persistToggle}/>
+          <input type="checkbox" id="persist" checked={isChecked} onChange={persistToggle}/>
           <label htmlFor="persist">Trust this device</label>
         </div>
         <p>Need an account?</p>
