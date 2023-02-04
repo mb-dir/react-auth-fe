@@ -25,8 +25,8 @@ export const Login = () => {
     e.preventDefault();
 
     try {
-      const { accessToken, roles } = await logIn(username, pwd);
-      setAuth({ user: username, roles, accessToken });
+      const { accessToken } = await logIn(username, pwd);
+      setAuth({ user: username, accessToken });
       setUsername("");
       setPwd("");
       navigate(from, { replace: true });
