@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
 import { useNavigate, useLocation } from "react-router-dom";
+import useLocalStorage from "../../hooks/useLocalStorage";
+
 export const Login = () => {
   const { setAuth, isPersist, setIsPersist } = useAuth();
   const usernameRef = useRef(null);
@@ -15,7 +17,7 @@ export const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const [ username, setUsername ] = useState("");
+  const [ username, setUsername ] = useLocalStorage("user", "");
   const [ pwd, setPwd ] = useState("");
 
   const handleSubmit = async e => {
