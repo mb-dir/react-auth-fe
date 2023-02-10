@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 export const Login = () => {
@@ -68,7 +67,7 @@ export const Login = () => {
           <label htmlFor="persist">Trust this device</label>
         </div>
         <p>Need an account?</p>
-        <a href="#">Click here</a>
+        <Link to="/register">Click here</Link>
       </form>
     </section>
   );

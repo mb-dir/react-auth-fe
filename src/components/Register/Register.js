@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from "clsx";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { signUp } from "../../services/user";
 
 export const Register = () => {
@@ -152,7 +152,7 @@ export const Register = () => {
             <button disabled={isButtonDisabled}>Sign up</button>
           </form>
           <p>Already registered?</p>
-          <a href="#">Sign in</a>
+          <Link to="/login">Sign in</Link>
         </div>
       )}
     </section>
