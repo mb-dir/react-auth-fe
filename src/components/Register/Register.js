@@ -57,12 +57,16 @@ export const Register = () => {
     [ confirmPassword, password ]
   );
 
+  const resetData = () => {
+    setUsername("");
+    setPassword("");
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       await signUp(username, password);
-      setUsername("");
-      setPassword("");
+      resetData();
     } catch (error) {
       console.error(error);
     }

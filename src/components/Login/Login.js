@@ -20,23 +20,26 @@ export const Login = () => {
   const [ username, setUsername ] = useLocalStorage("user", "");
   const [ pwd, setPwd ] = useState("");
 
+  const handleLogin = accessToken => {
+    setAuth({ user: username, accessToken });
+    setUsername("");
+    setPwd("");
+    navigate(from, { replace: true });
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
-
     try {
       const { accessToken } = await logIn(username, pwd);
-      setAuth({ user: username, accessToken });
-      setUsername("");
-      setPwd("");
-      navigate(from, { replace: true });
+      handleLogin(accessToken);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const persistToggle = ()=>{
+  const persistToggle = () => {
     setIsChecked(prev => !prev);
-  }
+  };
 
   return (
     <section>
@@ -63,7 +66,12 @@ export const Login = () => {
         />
         <button>Sign in</button>
         <div className="persistCheck">
-          <input type="checkbox" id="persist" checked={isChecked} onChange={persistToggle}/>
+          <input
+            type="checkbox"
+            id="persist"
+            checked={isChecked}
+            onChange={persistToggle}
+          />
           <label htmlFor="persist">Trust this device</label>
         </div>
         <p>Need an account?</p>
