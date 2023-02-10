@@ -37,10 +37,6 @@ export const Login = () => {
     }
   };
 
-  const persistToggle = () => {
-    setIsChecked(prev => !prev);
-  };
-
   return (
     <section>
       <h1>Sign in</h1>
@@ -70,7 +66,7 @@ export const Login = () => {
             type="checkbox"
             id="persist"
             checked={isChecked}
-            onChange={persistToggle}
+            onChange={() => setIsChecked(prev => !prev)}
           />
           <label htmlFor="persist">Trust this device</label>
         </div>
