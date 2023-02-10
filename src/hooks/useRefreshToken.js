@@ -1,7 +1,7 @@
 import axios from "../api/axios";
-import { useAuth } from "./useAuth";
+import useAuth from "./useAuth";
 
-export const useRefreshToken = () => {
+const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
@@ -17,3 +17,5 @@ export const useRefreshToken = () => {
   };
   return refresh;
 };
+
+export default useRefreshToken;

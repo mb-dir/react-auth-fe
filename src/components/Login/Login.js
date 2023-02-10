@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { logIn } from "../../services/user";
 import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 export const Login = () => {
-  const { setAuth} = useAuth();
+  const { setAuth } = useAuth();
   const usernameRef = useRef(null);
 
   useEffect(() => {
