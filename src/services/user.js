@@ -19,3 +19,10 @@ export const logIn = async (username, password) => {
 
   return data;
 };
+
+export const logOut = async () => {
+  await axios.get("/logout", {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  });
+};
