@@ -1,13 +1,17 @@
-import { logOut } from "../services/user";
+import useAxios from "./useAxios";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
   const { setAuth } = useAuth();
+  const fetchData = useAxios();
 
   const logout = async () => {
-    setAuth({});
     try {
-      await logOut();
+      await fetchData("get", "/logout", {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      setAuth({});
     } catch (error) {
       console.error(error);
     }
