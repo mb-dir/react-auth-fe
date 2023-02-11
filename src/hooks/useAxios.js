@@ -1,9 +1,10 @@
 import axios from "../api/axios";
 
 const useAxios = () => {
-  const fetchData = async (method, url, options = null) => {
+  const fetchData = async (method, url, options = null, body = null) => {
     try {
-      const { data } = await axios[method](url, JSON.stringify(options));
+      console.log(body);
+      const { data } = await axios[method](url, body, options);
       return data;
     } catch (error) {
       console.error(error);
