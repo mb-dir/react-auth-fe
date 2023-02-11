@@ -1,11 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { logIn } from "../../services/user";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import useAxios from "../../hooks/useAxios";
 
 export const Login = () => {
   const { setAuth } = useAuth();
+  const fetchData = useAxios();
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +31,15 @@ export const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { accessToken } = await logIn(username, pwd);
+      const { accessToken } = await fetchData(
+        "post",
+        "/auth",
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        },
+        { user: username, password: pwd }
+      );
       handleLogin(accessToken);
     } catch (error) {
       console.error(error);
