@@ -3,13 +3,15 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { signUp } from "../../services/user";
+import useAxios from "../../hooks/useAxios";
 
 export const Register = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+  const fetchData = useAxios();
 
   const [ username, setUsername ] = useState("");
   const [ isValidUsername, setIsValidUsername ] = useState(false);
@@ -65,7 +67,15 @@ export const Register = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await signUp(username, password);
+      await fetchData(
+        "post",
+        "register",
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        },
+        { user: username, password }
+      );
       resetData();
     } catch (error) {
       console.error(error);
