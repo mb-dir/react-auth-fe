@@ -62,6 +62,7 @@ export const Register = () => {
   const resetData = () => {
     setUsername("");
     setPassword("");
+    setConfirmPassword("");
   };
 
   const handleSubmit = async e => {
