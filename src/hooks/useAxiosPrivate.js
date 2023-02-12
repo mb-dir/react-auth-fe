@@ -40,7 +40,21 @@ const useAxiosPrivate = () => {
     }
   },[auth, refresh])
 
-  return axiosPrivate;
+  const fetchData = async (url, options = null) => {
+    try {
+      console.log(url, options);
+      const { data } = await axiosPrivate({
+        method: options.method || "get",
+        url,
+        data: options.payload,
+      });
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return fetchData;
 };
 
 export default useAxiosPrivate;

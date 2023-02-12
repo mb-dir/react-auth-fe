@@ -4,29 +4,23 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 export const Users = () => {
   const [ users, setUsers ] = useState();
-  const axiosPrivate = useAxiosPrivate();
+  const fetchData = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    let isMounted = true;
-
     const getUsers = async () => {
       try {
-        const res = await axiosPrivate.get('/users');
-        const usernames = res?.data.map(user=>user.username);
-        isMounted && setUsers(usernames);
+        const res = await fetchData("/users", {method: "get"})
+        const usernames = res.map(user=>user.username);
+        setUsers(usernames);
       } catch (error) {
         console.log(error);
         navigate('/login', {state: {from: location}, replace: true})
       }
     };
     getUsers();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [axiosPrivate, location, navigate]);
+  }, []);
 
   return (
     <article>
