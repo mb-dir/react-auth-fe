@@ -1,7 +1,7 @@
 import { axiosPrivate } from "../api/axios";
 import { useEffect } from "react";
-import { useRefreshToken } from "./useRefreshToken";
-import { useAuth } from "./useAuth";
+import  useRefreshToken  from "./useRefreshToken";
+import useAuth  from "./useAuth";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
@@ -40,7 +40,20 @@ const useAxiosPrivate = () => {
     }
   },[auth, refresh])
 
-  return axiosPrivate;
+  const fetchData = async (url, options = null) => {
+    try {
+      const { data } = await axiosPrivate({
+        method: options.method || "get",
+        url,
+        data: options.payload,
+      });
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return fetchData;
 };
 
 export default useAxiosPrivate;

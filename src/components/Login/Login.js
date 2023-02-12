@@ -1,12 +1,12 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useRef, useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { logIn } from "../../services/user";
-import { useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import useAxios from "../../hooks/useAxios";
 
 export const Login = () => {
-  const { setAuth} = useAuth();
+  const { setAuth } = useAuth();
+  const fetchData = useAxios();
   const usernameRef = useRef(null);
 
   useEffect(() => {
@@ -21,23 +21,30 @@ export const Login = () => {
   const [ username, setUsername ] = useLocalStorage("user", "");
   const [ pwd, setPwd ] = useState("");
 
+  const handleLogin = accessToken => {
+    setAuth({ user: username, accessToken });
+    setUsername("");
+    setPwd("");
+    navigate(from, { replace: true });
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
-
     try {
-      const { accessToken } = await logIn(username, pwd);
-      setAuth({ user: username, accessToken });
-      setUsername("");
-      setPwd("");
-      navigate(from, { replace: true });
+      const { accessToken } = await fetchData(
+        "/auth",
+        {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+          payload: { user: username, password: pwd }
+        },
+      );
+      handleLogin(accessToken);
     } catch (error) {
       console.error(error);
     }
   };
-
-  const persistToggle = ()=>{
-    setIsChecked(prev => !prev);
-  }
 
   return (
     <section>
@@ -64,11 +71,16 @@ export const Login = () => {
         />
         <button>Sign in</button>
         <div className="persistCheck">
-          <input type="checkbox" id="persist" checked={isChecked} onChange={persistToggle}/>
+          <input
+            type="checkbox"
+            id="persist"
+            checked={isChecked}
+            onChange={() => setIsChecked(prev => !prev)}
+          />
           <label htmlFor="persist">Trust this device</label>
         </div>
         <p>Need an account?</p>
-        <a href="#">Click here</a>
+        <Link to="/register">Click here</Link>
       </form>
     </section>
   );

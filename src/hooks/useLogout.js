@@ -1,15 +1,18 @@
-import axios from "../api/axios";
-import { useAuth } from "./useAuth";
+import useAxios from "./useAxios";
+import useAuth from "./useAuth";
 
 const useLogout = () => {
   const { setAuth } = useAuth();
+  const fetchData = useAxios();
 
   const logout = async () => {
-    setAuth({});
     try {
-      const res = await axios("/logout", {
+      await fetchData("/logout", {
+        method: "get",
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+      setAuth({});
     } catch (error) {
       console.error(error);
     }
