@@ -68,15 +68,12 @@ export const Register = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await fetchData(
-        "post",
-        "register",
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        },
-        { user: username, password }
-      );
+      await fetchData("/register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        payload: { user: username, password },
+      });
       resetData();
     } catch (error) {
       console.error(error);
