@@ -15,7 +15,7 @@ export const Users = () => {
         const usernames = res.map(user=>user.username);
         setUsers(usernames);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         navigate('/login', {state: {from: location}, replace: true})
       }
     };
