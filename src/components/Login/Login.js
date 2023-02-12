@@ -32,13 +32,13 @@ export const Login = () => {
     e.preventDefault();
     try {
       const { accessToken } = await fetchData(
-        "post",
         "/auth",
         {
+          method: "post",
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
+          payload: { user: username, password: pwd }
         },
-        { user: username, password: pwd }
       );
       handleLogin(accessToken);
     } catch (error) {

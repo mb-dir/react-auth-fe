@@ -7,7 +7,8 @@ const useLogout = () => {
 
   const logout = async () => {
     try {
-      await fetchData("get", "/logout", {
+      await fetchData("/logout", {
+        method: "get",
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
