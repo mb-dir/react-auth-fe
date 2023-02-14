@@ -43,9 +43,9 @@ const useAxiosPrivate = () => {
   const fetchData = async (url, options = null) => {
     try {
       const { data } = await axiosPrivate({
-        method: options.method || "get",
+        method: options?.method || "get",
         url,
-        data: options.payload,
+        data: options?.payload,
       });
       return data;
     } catch (error) {
