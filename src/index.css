@@ -17,6 +17,10 @@ body {
   background-color: dodgerblue;
 }
 
+ul {
+  list-style: none;
+}
+
 .App {
   display: flex;
   flex-direction: column;
