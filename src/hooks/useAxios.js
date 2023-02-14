@@ -4,11 +4,11 @@ const useAxios = () => {
   const fetchData = async (url, options = null) => {
     try {
       const { data } = await axios({
-        method: options.method || "get",
+        method: options?.method || "get",
         url,
-        withCredentials: options.withCredentials || false,
-        data: options.payload,
-        headers: options.headers,
+        withCredentials: options?.withCredentials || false,
+        data: options?.payload,
+        headers: options?.headers,
       });
       return data;
     } catch (error) {
