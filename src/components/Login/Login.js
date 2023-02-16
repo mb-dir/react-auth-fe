@@ -1,13 +1,13 @@
+import { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import useAxios from "../../hooks/useAxios";
 import { useForm } from "react-hook-form";
 
 export const Login = () => {
   const { setAuth } = useAuth();
   const fetchData = useAxios();
-  const { register, handleSubmit, formState: {errors} } = useForm({
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
     defaultValues: {
       username: "",
       password: "",
@@ -15,19 +15,33 @@ export const Login = () => {
     },
   });
 
+  useEffect(
+    () => {
+      const isPersist = JSON.parse(localStorage.getItem("persist"));
+      if (isPersist) {
+        setValue("checkbox", true);
+      }
+    },
+    [ setValue ]
+  );
+
+  const handleCheckboxChange = e => {
+    const isChecked = e.target.checked;
+    localStorage.setItem("persist", isChecked);
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-
-  const handleLogin = (accessToken, {username, password}) => {
+  const handleLogin = (accessToken, { username, password }) => {
     setAuth({ user: username, accessToken });
     navigate(from, { replace: true });
   };
 
-  const onSubmit = async ({username, password}) => {
+  const onSubmit = async ({ username, password }) => {
     try {
-      const userData = {user: username, password}
+      const userData = { user: username, password };
       const { accessToken } = await fetchData("/auth", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -50,7 +64,7 @@ export const Login = () => {
           {...register("username", {
             required: {
               value: true,
-              message: "Username is required"
+              message: "Username is required",
             },
             minLength: {
               value: 4,
@@ -64,19 +78,19 @@ export const Login = () => {
 
         <label htmlFor="password">Password</label>
         <input
-        {...register("password", {
+          {...register("password", {
             required: {
               value: true,
-              message: "Password is required"
+              message: "Password is required",
             },
             minLength: {
               value: 6,
               message: "Password has to have min 6 characters",
             },
-            pattern:{
+            pattern: {
               value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-              message: "Password has to inlcude special character and number"
-            }
+              message: "Password has to inlcude special character and number",
+            },
           })}
           type="password"
           id="password"
@@ -85,7 +99,7 @@ export const Login = () => {
         <button>Sign in</button>
         <div className="persistCheck">
           <input
-            {...register("checkbox")}
+            {...register("checkbox", { onChange: handleCheckboxChange })}
             type="checkbox"
             id="persist"
           />
