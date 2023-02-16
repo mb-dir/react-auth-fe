@@ -1,46 +1,40 @@
-import { useRef, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import useAxios from "../../hooks/useAxios";
+import { useForm } from "react-hook-form";
 
 export const Login = () => {
   const { setAuth } = useAuth();
   const fetchData = useAxios();
-  const usernameRef = useRef(null);
-
-  useEffect(() => {
-    usernameRef.current.focus();
-  }, []);
+  const { register, handleSubmit, formState: {errors} } = useForm({
+    defaultValues: {
+      username: "",
+      password: "",
+      checkbox: false,
+    },
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const [ isChecked, setIsChecked ] = useLocalStorage("persist", false);
-  const [ username, setUsername ] = useLocalStorage("user", "");
-  const [ pwd, setPwd ] = useState("");
 
-  const handleLogin = accessToken => {
+  const handleLogin = (accessToken, {username, password}) => {
     setAuth({ user: username, accessToken });
-    setUsername("");
-    setPwd("");
     navigate(from, { replace: true });
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async ({username, password}) => {
     try {
-      const { accessToken } = await fetchData(
-        "/auth",
-        {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-          payload: { user: username, password: pwd }
-        },
-      );
-      handleLogin(accessToken);
+      const userData = {user: username, password}
+      const { accessToken } = await fetchData("/auth", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        payload: userData,
+      });
+      handleLogin(accessToken, userData);
     } catch (error) {
       console.error(error);
     }
@@ -50,32 +44,50 @@ export const Login = () => {
     <section>
       <h1>Sign in</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="username">Username</label>
         <input
+          {...register("username", {
+            required: {
+              value: true,
+              message: "Username is required"
+            },
+            minLength: {
+              value: 4,
+              message: "Username has to have min 4 characters",
+            },
+          })}
           type="text"
           id="username"
-          ref={usernameRef}
-          onChange={({ target }) => setUsername(target.value)}
-          value={username}
-          required
         />
+        <p className="small-info">{errors.username?.message}</p>
 
         <label htmlFor="password">Password</label>
         <input
+        {...register("password", {
+            required: {
+              value: true,
+              message: "Password is required"
+            },
+            minLength: {
+              value: 6,
+              message: "Password has to have min 6 characters",
+            },
+            pattern:{
+              value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+              message: "Password has to inlcude special character and number"
+            }
+          })}
           type="password"
           id="password"
-          onChange={({ target }) => setPwd(target.value)}
-          value={pwd}
-          required
         />
+        <p className="small-info">{errors.password?.message}</p>
         <button>Sign in</button>
         <div className="persistCheck">
           <input
+            {...register("checkbox")}
             type="checkbox"
             id="persist"
-            checked={isChecked}
-            onChange={() => setIsChecked(prev => !prev)}
           />
           <label htmlFor="persist">Trust this device</label>
         </div>
