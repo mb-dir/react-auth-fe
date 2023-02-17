@@ -1,7 +1,4 @@
-import clsx from "clsx";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAxios from "../../hooks/useAxios";
@@ -31,7 +28,9 @@ export const Register = () => {
 
   const passwordValue = watch("password");
   const confirmPasswordValue = watch("confirmPassword");
-  const isButtonDisabled = ![passwordValue, confirmPasswordValue].every(Boolean) || passwordValue !== confirmPasswordValue;
+  const isButtonDisabled =
+    ![ passwordValue, confirmPasswordValue ].every(Boolean) ||
+    passwordValue !== confirmPasswordValue;
 
   useEffect(
     () => {
@@ -46,7 +45,7 @@ export const Register = () => {
     [ passwordValue, confirmPasswordValue, setError, clearErrors ]
   );
 
-  const onSubmit = async ({username, password}) => {
+  const onSubmit = async ({ username, password }) => {
     try {
       await fetchData("/register", {
         method: "post",
