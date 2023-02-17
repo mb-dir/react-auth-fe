@@ -1,8 +1,6 @@
-import clsx from "clsx";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import useAxios from "../../hooks/useAxios";
 
 export const Register = () => {
@@ -13,60 +11,46 @@ export const Register = () => {
 
   const fetchData = useAxios();
 
-  const [ username, setUsername ] = useState("");
-  const [ isValidUsername, setIsValidUsername ] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setError,
+    clearErrors,
+    setFocus
+  } = useForm({
+    defaultValues: {
+      username: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-  const [ password, setPassword ] = useState("");
-  const [ isValidPassword, setIsValidPassword ] = useState(false);
-
-  const [ confirmPassword, setConfirmPassword ] = useState("");
-  const [ arePasswordsSame, setArePasswordsSame ] = useState(false);
-
+  const passwordValue = watch("password");
+  const confirmPasswordValue = watch("confirmPassword");
   const isButtonDisabled =
-    !arePasswordsSame || !isValidPassword || !isValidUsername;
-
-  const usernameRef = useRef(null);
-
-  useEffect(() => {
-    usernameRef.current.focus();
-  }, []);
+    ![ passwordValue, confirmPasswordValue ].every(Boolean) ||
+    passwordValue !== confirmPasswordValue;
 
   useEffect(
     () => {
-      setIsValidUsername(USER_REGEX.test(username));
+      clearErrors("confirmPassword");
+      if (passwordValue !== confirmPasswordValue) {
+        setError("confirmPassword", {
+          type: "confirmPassword",
+          message: "Passwords are not the same",
+        });
+      }
     },
-    [ USER_REGEX, username ]
+    [ passwordValue, confirmPasswordValue, setError, clearErrors ]
   );
 
-  useEffect(
-    () => {
-      setIsValidPassword(PWD_REGEX.test(password));
-    },
-    [ PWD_REGEX, password ]
-  );
+  useEffect(()=>{
+    setFocus("username");
+  }, [])
 
-  useEffect(
-    () => {
-      setIsValidPassword(PWD_REGEX.test(password));
-    },
-    [ PWD_REGEX, password ]
-  );
-
-  useEffect(
-    () => {
-      setArePasswordsSame(password === confirmPassword && password !== "");
-    },
-    [ confirmPassword, password ]
-  );
-
-  const resetData = () => {
-    setUsername("");
-    setPassword("");
-    setConfirmPassword("");
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async ({ username, password }) => {
     try {
       await fetchData("/register", {
         method: "post",
@@ -74,7 +58,6 @@ export const Register = () => {
         withCredentials: true,
         payload: { user: username, password },
       });
-      resetData();
     } catch (error) {
       console.error(error);
     }
@@ -83,73 +66,63 @@ export const Register = () => {
   return (
     <section>
       <div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">
-            Username
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(isValidUsername ? "valid" : "hide")}
-            />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(
-                isValidUsername || !username ? "hide" : "invalid"
-              )}
-            />
-          </label>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="username">Username</label>
           <input
+            {...register("username", {
+              required: {
+                value: true,
+                message: "Username is required",
+              },
+              pattern: {
+                value: USER_REGEX,
+                message: "Invalid username format",
+              },
+            })}
             id="username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            required
             autoComplete="off"
-            ref={usernameRef}
             type="text"
           />
+          <p className="small-info">{errors.username?.message}</p>
 
-          <label htmlFor="password">
-            Password
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(isValidPassword ? "valid" : "hide")}
-            />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(
-                isValidPassword || !password ? "hide" : "invalid"
-              )}
-            />
-          </label>
+          <label htmlFor="password">Password</label>
           <input
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Password is required",
+              },
+              pattern: {
+                value: PWD_REGEX,
+                message:
+                  "Password has to have min 8 characters(inlcude special character, number and capital letter)",
+              },
+            })}
             id="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            required
             autoComplete="off"
             type="password"
           />
+          <p className="small-info">{errors.password?.message}</p>
 
-          <label htmlFor="confirmPassword">
-            Confirm password
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={clsx(arePasswordsSame ? "valid" : "hide")}
-            />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={clsx(
-                arePasswordsSame || !confirmPassword ? "hide" : "invalid"
-              )}
-            />
-          </label>
+          <label htmlFor="confirmPassword">Confirm password</label>
           <input
+            {...register("confirmPassword", {
+              required: {
+                value: true,
+                message: "Password is required",
+              },
+              pattern: {
+                value: PWD_REGEX,
+                message:
+                  "Password has to have min 8 characters(inlcude special character and number)",
+              },
+            })}
             id="confirmPassword"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-            required
             autoComplete="off"
             type="password"
           />
+          <p className="small-info">{errors.confirmPassword?.message}</p>
+
           <button disabled={isButtonDisabled}>Sign up</button>
         </form>
         <p>Already registered?</p>
