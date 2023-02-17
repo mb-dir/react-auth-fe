@@ -7,7 +7,13 @@ import { useForm } from "react-hook-form";
 export const Login = () => {
   const { setAuth } = useAuth();
   const fetchData = useAxios();
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    setFocus,
+  } = useForm({
     defaultValues: {
       username: "",
       password: "",
@@ -33,6 +39,10 @@ export const Login = () => {
     [ setValue ]
   );
 
+  useEffect(() => {
+    setFocus("username");
+  }, []);
+
   const handleCheckboxChange = e => {
     const isChecked = e.target.checked;
     localStorage.setItem("persist", isChecked);
@@ -47,7 +57,7 @@ export const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const handleLogin = (accessToken, username ) => {
+  const handleLogin = (accessToken, username) => {
     setAuth({ user: username, accessToken });
     navigate(from, { replace: true });
   };

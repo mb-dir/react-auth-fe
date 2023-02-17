@@ -1,15 +1,20 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export const Editor = () => {
   const fetchData = useAxiosPrivate();
-  const { register, formState: { errors }, handleSubmit } = useForm({
+  const { register, formState: { errors }, handleSubmit, setFocus } = useForm({
     defaultValues: {
       firstName: "",
       lastName: "",
     },
   });
+
+  useEffect(() => {
+    setFocus("firstName");
+  }, []);
 
   const onSubmit = async ({ firstName, lastName }) => {
     try {

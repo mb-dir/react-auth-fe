@@ -18,6 +18,7 @@ export const Register = () => {
     watch,
     setError,
     clearErrors,
+    setFocus
   } = useForm({
     defaultValues: {
       username: "",
@@ -44,6 +45,10 @@ export const Register = () => {
     },
     [ passwordValue, confirmPasswordValue, setError, clearErrors ]
   );
+
+  useEffect(()=>{
+    setFocus("username");
+  }, [])
 
   const onSubmit = async ({ username, password }) => {
     try {
