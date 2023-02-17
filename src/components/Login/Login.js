@@ -47,7 +47,7 @@ export const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const handleLogin = (accessToken, { username, password }) => {
+  const handleLogin = (accessToken, username ) => {
     setAuth({ user: username, accessToken });
     navigate(from, { replace: true });
   };
@@ -61,7 +61,8 @@ export const Login = () => {
         withCredentials: true,
         payload: userData,
       });
-      handleLogin(accessToken, userData);
+
+      handleLogin(accessToken, username);
     } catch (error) {
       console.error(error);
     }
