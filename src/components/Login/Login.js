@@ -15,6 +15,11 @@ export const Login = () => {
     },
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
   useEffect(
     () => {
       const isPersist = JSON.parse(localStorage.getItem("persist"));
@@ -33,7 +38,7 @@ export const Login = () => {
     localStorage.setItem("persist", isChecked);
   };
 
-   const handleUsernameChange = e => {
+  const handleUsernameChange = e => {
     const username = JSON.stringify(e.target.value);
     localStorage.setItem("user", username);
   };
@@ -75,9 +80,9 @@ export const Login = () => {
               value: true,
               message: "Username is required",
             },
-            minLength: {
-              value: 4,
-              message: "Username has to have min 4 characters",
+            pattern: {
+              value: USER_REGEX,
+              message: "Invalid username format",
             },
           })}
           type="text"
@@ -92,13 +97,10 @@ export const Login = () => {
               value: true,
               message: "Password is required",
             },
-            minLength: {
-              value: 6,
-              message: "Password has to have min 6 characters",
-            },
             pattern: {
-              value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
-              message: "Password has to inlcude special character and number",
+              value: PWD_REGEX,
+              message:
+                "Password has to have min 8 characters(inlcude special character, number and capital letter)",
             },
           })}
           type="password"

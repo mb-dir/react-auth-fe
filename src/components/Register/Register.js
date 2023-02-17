@@ -90,7 +90,7 @@ export const Register = () => {
               pattern: {
                 value: PWD_REGEX,
                 message:
-                  "Password has to have min 8 characters(inlcude special character and number)",
+                  "Password has to have min 8 characters(inlcude special character, number and capital letter)",
               },
             })}
             id="password"
