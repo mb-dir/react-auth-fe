@@ -18,6 +18,9 @@ export const Login = () => {
   useEffect(
     () => {
       const isPersist = JSON.parse(localStorage.getItem("persist"));
+      const username = JSON.parse(localStorage.getItem("user"));
+
+      setValue("username", username);
       if (isPersist) {
         setValue("checkbox", true);
       }
@@ -28,6 +31,11 @@ export const Login = () => {
   const handleCheckboxChange = e => {
     const isChecked = e.target.checked;
     localStorage.setItem("persist", isChecked);
+  };
+
+   const handleUsernameChange = e => {
+    const username = JSON.stringify(e.target.value);
+    localStorage.setItem("user", username);
   };
 
   const navigate = useNavigate();
@@ -62,6 +70,7 @@ export const Login = () => {
         <label htmlFor="username">Username</label>
         <input
           {...register("username", {
+            onChange: handleUsernameChange,
             required: {
               value: true,
               message: "Username is required",
