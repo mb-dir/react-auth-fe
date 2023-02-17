@@ -46,21 +46,17 @@ export const Register = () => {
     [ passwordValue, confirmPasswordValue, setError, clearErrors ]
   );
 
-  const onSubmit = data => {
-    console.log(errors);
-    console.log(data);
-    // e.preventDefault();
-    // try {
-    //   await fetchData("/register", {
-    //     method: "post",
-    //     headers: { "Content-Type": "application/json" },
-    //     withCredentials: true,
-    //     payload: { user: username, password },
-    //   });
-    //   resetData();
-    // } catch (error) {
-    //   console.error(error);
-    // }
+  const onSubmit = async ({username, password}) => {
+    try {
+      await fetchData("/register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        payload: { user: username, password },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
