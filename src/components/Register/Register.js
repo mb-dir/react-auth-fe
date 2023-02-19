@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import useAxios from "../../hooks/useAxios";
 
 export const Register = () => {
@@ -58,8 +59,13 @@ export const Register = () => {
         withCredentials: true,
         payload: { user: username, password },
       });
+      toast.success("You have been registered", {
+        autoClose: 2000,
+      })
     } catch (error) {
-      console.error(error);
+      toast.error("Something went wrong", {
+        autoClose: 2000,
+      })
     }
   };
 

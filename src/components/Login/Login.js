@@ -3,6 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const { setAuth } = useAuth();
@@ -74,7 +75,9 @@ export const Login = () => {
 
       handleLogin(accessToken, username);
     } catch (error) {
-      console.error(error);
+      toast.error("Something went wrong", {
+        autoClose: 2000,
+      });
     }
   };
 
