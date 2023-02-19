@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { toast } from "react-toastify";
 
 export const Editor = () => {
   const fetchData = useAxiosPrivate();
@@ -22,8 +23,13 @@ export const Editor = () => {
         method: "post",
         payload: { firstname: firstName, lastname: lastName },
       });
+      toast.success("Employee was added", {
+        autoClose: 2000,
+      })
     } catch (error) {
-      console.error(error);
+      toast.error("Something went wrong", {
+        autoClose: 2000,
+      })
     }
   };
 
