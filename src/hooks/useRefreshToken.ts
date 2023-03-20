@@ -9,7 +9,7 @@ const useRefreshToken = () => {
       method: "get",
       withCredentials: true,
     });
-    setAuth(prev => {
+    setAuth((prev: { roles: string[]; accessToken: string }) => {
       return {
         ...prev,
         roles: res.roles,

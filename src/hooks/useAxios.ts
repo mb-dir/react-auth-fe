@@ -1,7 +1,7 @@
 import axios from "../api/axios";
 
 const useAxios = () => {
-  const fetchData = async (url, options = null) => {
+  const fetchData = async (url:string, options:{method:string, withCredentials: boolean, payload?: any, headers?: any} | null = null) => {
     try {
       const { data } = await axios({
         method: options?.method || "get",
