@@ -51,7 +51,7 @@ export const Register = () => {
     setFocus("username");
   }, [])
 
-  const onSubmit = async ({ username, password }) => {
+  const onSubmit = async ({ username, password }:{username: string, password: string}) => {
     try {
       await fetchData("/register", {
         method: "post",

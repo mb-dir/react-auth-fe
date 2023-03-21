@@ -17,7 +17,7 @@ export const Editor = () => {
     setFocus("firstName");
   }, []);
 
-  const onSubmit = async ({ firstName, lastName }) => {
+  const onSubmit = async ({ firstName, lastName }:{firstName:string, lastName: string}) => {
     try {
       await fetchData("/employees", {
         method: "post",

@@ -10,7 +10,7 @@ const useAxiosPrivate = () => {
   useEffect(()=>{
     const requestIntercept = axiosPrivate.interceptors.request.use(
       config=>{
-        if(!config.headers["Authorization"]){
+        if(!!config.headers && !config.headers["Authorization"]){
           config.headers["Authorization"] = `Bearer ${auth?.accessToken}`
         }
         return config;
@@ -40,7 +40,7 @@ const useAxiosPrivate = () => {
     }
   },[auth, refresh])
 
-  const fetchData = async (url, options = null) => {
+  const fetchData = async (url:string, options:{method: string, payload?: any} | null = null) => {
     try {
       const { data } = await axiosPrivate({
         method: options?.method || "get",

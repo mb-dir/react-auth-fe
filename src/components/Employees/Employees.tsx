@@ -2,8 +2,13 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useState, useEffect, useCallback } from "react";
 
 export const Employees = () => {
+  type employee = {
+    _id: string;
+    firstname:string;
+    lastname: string
+  }
   const fetchData = useAxiosPrivate();
-  const [ employees, setEmployees ] = useState([]);
+  const [ employees, setEmployees ] = useState<employee[]>([]);
 
   const getEmployees = useCallback(async () => {
       try {
@@ -18,7 +23,7 @@ export const Employees = () => {
       getEmployees();
   }, []);
 
-  const deleteEmployee = async(id)=>{
+  const deleteEmployee = async(id:string)=>{
     try {
       await fetchData("/employees", {method: 'delete', payload: {id}});
       getEmployees();
