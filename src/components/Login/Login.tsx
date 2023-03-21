@@ -29,8 +29,8 @@ export const Login = () => {
 
   useEffect(
     () => {
-      const isPersist = JSON.parse(localStorage.getItem("persist"));
-      const username = JSON.parse(localStorage.getItem("user"));
+      const isPersist = JSON.parse(localStorage.getItem("persist")||"");
+      const username = JSON.parse(localStorage.getItem("user")||"");
 
       setValue("username", username);
       if (isPersist) {
@@ -44,12 +44,12 @@ export const Login = () => {
     setFocus("username");
   }, []);
 
-  const handleCheckboxChange = e => {
-    const isChecked = e.target.checked;
+  const handleCheckboxChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked.toString();
     localStorage.setItem("persist", isChecked);
   };
 
-  const handleUsernameChange = e => {
+  const handleUsernameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const username = JSON.stringify(e.target.value);
     localStorage.setItem("user", username);
   };
@@ -58,12 +58,12 @@ export const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const handleLogin = (accessToken, username) => {
+  const handleLogin = (accessToken:string, username:string) => {
     setAuth({ user: username, accessToken });
     navigate(from, { replace: true });
   };
 
-  const onSubmit = async ({ username, password }) => {
+  const onSubmit = async ({ username, password }:{username:string, password: string}) => {
     try {
       const userData = { user: username, password };
       const { accessToken } = await fetchData("/auth", {

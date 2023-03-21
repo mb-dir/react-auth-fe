@@ -4,7 +4,7 @@ const getLocalValue = (key: string) => {
   return JSON.parse(localStorage.getItem(key) || "");
 };
 
-const useLocalStorage = (key: string, initValue: string) => {
+const useLocalStorage = (key: string, initValue: string | boolean) => {
   const [ value, setValue ] = useState(() => getLocalValue(key) || initValue);
 
   useEffect(
